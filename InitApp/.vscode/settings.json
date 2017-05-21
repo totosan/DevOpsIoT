@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "*h*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*h*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpp*cpparray": "cpp",
+        "array": "cpp",
+        "*h*hhash_map": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*h*harray": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "*hhash_map": "cpp",
+        "*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hpp*hppinitializer_list": "cpp",
+        "initializer_list": "cpp",
+        "*h*h*h*hregex": "cpp",
+        "valarray": "cpp",
+        "*cpp*cpp*cpp*h*h*hrope": "cpp",
+        "rope": "cpp",
+        "slist": "cpp",
+        "cstring": "cpp",
+        "*hrandom": "cpp",
+        "random": "cpp"
+    }
+}

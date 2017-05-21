@@ -1,0 +1,2 @@
+# C:\Users\toto_\.iot-hub-getting-started/arduino-1.6.11/arduino_debug.exe --upload --board esp8266:esp8266:nodemcuv2:CpuFrequency=80,UploadSpeed=115200,FlashSize=4M1M --port COM3 D:\DevProjekte\test\devopsiot\initapp/app/app.ino --verbose-upload
+ C:\Users\toto_\AppData\Local\Arduino15\packages\esp8266\tools\esptool\0.4.9/esptool.exe -vv -cd nodemcu -cb 921600 -cp COM3 -ca 0x00000 -cf D:\DevProjekte\test\devopsiot\initapp\temp/app.ino.bin

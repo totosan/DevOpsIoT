@@ -1,0 +1,20 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "iotHubMessage",
+      "path": "devopstesthub",
+      "consumerGroup": "$Default",
+      "connection": "devopstesthubRead",
+      "direction": "in"
+    },
+    {
+      "type": "eventHub",
+      "name": "outputEventHubMessage",
+      "path": "devopsiot-internal-test",
+      "connection": "devopsiot-internal",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

@@ -1,0 +1,36 @@
+{
+    "$schema": "https:schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "innerAppServPlanName": {
+            "type": "String"
+        },
+        "functionName": {
+            "type": "String"
+        },
+        "innerAppServPlanNameResId": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "low_rg_name": "[concat(toLower(resourceGroup().name))]",
+        "functionName": "[parameters('functionName')]",
+        "inner_appServicePlanName": "[parameters('innerAppServPlanName')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "name": "[variables('functionName')]",
+            "apiVersion": "2015-08-01",
+            "location": "West Europe",
+            "tags": {
+                "displayName": "Az Function"
+            },
+            "properties": {
+                "name": "[variables('functionName')]",
+                "serverFarmId": "[parameters('innerAppServPlanNameResId')]"
+            }
+        }
+    ]
+}

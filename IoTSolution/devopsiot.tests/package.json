@@ -1,0 +1,16 @@
+{
+  "name": "TestClient",
+  "version": "0.0.0",
+  "description": "",
+  "main": "acceptor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "azure-iothub": "^1.1.2",    
+    "azure-iot-device-mqtt": "1.1.5",
+    "azure-iot-device-http": "1.1.5"
+  }
+}

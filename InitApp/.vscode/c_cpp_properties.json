@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": ["/usr/include"],
+            "browse" : {
+                "limitSymbolsToIncludedHeaders" : true,
+                "databaseFilename" : ""
+            }
+        },
+        {
+            "name": "Linux",
+            "includePath": ["/usr/include"],
+            "browse" : {
+                "limitSymbolsToIncludedHeaders" : true,
+                "databaseFilename" : ""
+            }
+        },
+        {
+            "name": "Win32",
+            "includePath": ["c:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include"
+            ,"C:/Program Files (x86)/Arduino/libraries"
+            ,"C:/Users/toto_/.iot-hub-getting-started/arduino-1.6.11/hardware/arduino/avr/cores"
+            ,"C:/Users/toto_/OneDrive/Dokumente/Arduino/libraries"
+            ,"C:/Users/toto_/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/2.3.0/libraries"
+            ,"C:/Users/toto_/AppData/Local/Arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/xtensa-lx106-elf/include"],
+            "browse" : {
+                "limitSymbolsToIncludedHeaders" : false,
+                "databaseFilename" : ""
+            }
+        }
+    ]
+}

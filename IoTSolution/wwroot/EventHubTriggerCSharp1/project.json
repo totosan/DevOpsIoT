@@ -1,0 +1,11 @@
+{
+  "frameworks": {
+    "net46":{
+      "dependencies": {
+        "Microsoft.Azure.Devices": "1.1.4",
+        "Microsoft.Azure.Devices.Client":"1.1.4",
+        "WindowsAzure.ServiceBus":"3.4.4"
+      }
+    }
+   }
+}
