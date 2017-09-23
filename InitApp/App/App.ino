@@ -23,6 +23,8 @@ ESP8266WiFiMulti WiFiMulti;
 uint8_t MAC_array[6];
 char MAC_char[18];
 
+static int LED = LED_BUILTIN;
+
 /*char *ssid = "HUAWEI-BF71";
 char *pass = "r6b0n8f5\0\0\0\0\0\0\0\0";
 */
@@ -31,11 +33,14 @@ void setup()
 {
 
     USE_SERIAL.begin(115200);
-    //USE_SERIAL.setDebugOutput(true);
+    USE_SERIAL.setDebugOutput(true);
 
     USE_SERIAL.println();
     USE_SERIAL.println();
     USE_SERIAL.println();
+
+    pinMode(LED,OUTPUT);
+    
 
     for (uint8_t t = 4; t > 0; t--)
     {
@@ -43,6 +48,10 @@ void setup()
         USE_SERIAL.flush();
         delay(1000);
     }
+    
+    digitalWrite(LED,LOW);
+    delay(1000);
+    digitalWrite(LED,HIGH);
 
     WiFiMulti.addAP(ssid, pass);
 

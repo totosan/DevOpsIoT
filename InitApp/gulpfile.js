@@ -25,7 +25,7 @@ require('gulp-common')(require('gulp'), 'arduino-esp8266-nodemcuv2', {
     iot_hub_consumer_group_name: 'cg1',
     azure_storage_connection_string: '[Azure storage connection string]'
   },
-  configPostfix: 'arduino',
+  configPostfix: 'nodemcuv2',
   app: ['app.ino', 'config.h']
 });
 

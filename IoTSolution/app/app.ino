@@ -38,7 +38,6 @@ static int LED_SIGNAL = 5;
 
 static WiFiClientSecure sslClient; // for ESP8266
 
-static AzureIoTHubClient iotHubClient;
 char *m_cnnStr, *m_ssid, *m_pass;
 uint8_t MAC_array[6];
 char MAC_char[18];
@@ -57,7 +56,7 @@ void setup()
     initSerial();
 
     eeprom_used_len = LoadConfig(512);
-Serial.print("Check for Update flag!");
+    Serial.print("Check for Update flag!");
     if (LoadUpdateFlag())
     {
         digitalWrite(LED_SIGNAL, HIGH);
@@ -70,8 +69,6 @@ Serial.print("Check for Update flag!");
 
     initWifi();
     initTime();
-
-    iotHubClient.begin(sslClient);
 
     Serial.print("free memory:");
     Serial.println(ESP.getFreeSketchSpace());
