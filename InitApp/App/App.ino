@@ -33,7 +33,7 @@ void setup()
 {
 
     USE_SERIAL.begin(115200);
-    USE_SERIAL.setDebugOutput(true);
+    //USE_SERIAL.setDebugOutput(true);
 
     USE_SERIAL.println();
     USE_SERIAL.println();
@@ -48,11 +48,7 @@ void setup()
         USE_SERIAL.flush();
         delay(1000);
     }
-    
-    digitalWrite(LED,LOW);
-    delay(1000);
-    digitalWrite(LED,HIGH);
-
+  
     WiFiMulti.addAP(ssid, pass);
 
     WiFi.macAddress(MAC_array);
@@ -60,7 +56,10 @@ void setup()
     {
         sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
     }
+    Serial.print("MAC: ");
     Serial.println(MAC_char);
+    Serial.println(ssid);
+    Serial.println(pass);
 }
 
 void loop()
@@ -115,6 +114,8 @@ void loop()
                     USE_SERIAL.printf("\r\nDevices Name:%s\r\n", deviceName.c_str());
                     // don't forget to free the string after finished using it
                     USE_SERIAL.printf("starting firmware update....\r\n");
+                    
+                    SaveUpdateFlag(true);
                     t_httpUpdate_return ret = ESPhttpUpdate.update(payloadFirmware);
                     //t_httpUpdate_return  ret = ESPhttpUpdate.update("https://server/file.bin");
 
@@ -130,6 +131,7 @@ void loop()
 
                     case HTTP_UPDATE_OK:
                         USE_SERIAL.println("HTTP_UPDATE_OK");
+                        delay(10000);
                         break;
                     }
                 }
@@ -143,7 +145,17 @@ void loop()
         http.end();
     }
 
-    delay(10000);
+    delay(5000);
+}
+
+void SaveUpdateFlag(bool isUpdate)
+{
+    EEPROM.begin(512);
+    EEPROM.write(250, (int)isUpdate);
+    if (isUpdate)
+        Serial.print("Update flag written");
+    EEPROM.commit();
+    EEPROM.end();
 }
 
 bool SaveConfig(String connectionStr, const char *ssid, const char *pwd)

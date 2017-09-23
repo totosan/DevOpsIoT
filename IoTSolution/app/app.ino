@@ -109,10 +109,10 @@ void loop()
     }
 }
 
-void SaveUpdateFlag(bool isUpdate)
+void SaveUpdateFlag(bool isUpdated)
 {
     EEPROM.begin(512);
-    EEPROM.write(250, (int)isUpdate);
+    EEPROM.write(250, (int)isUpdated);
     if (isUpdate)
         Serial.print("Update flag written");
     EEPROM.commit();
