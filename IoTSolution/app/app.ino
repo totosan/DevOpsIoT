@@ -113,7 +113,7 @@ void SaveUpdateFlag(bool isUpdated)
 {
     EEPROM.begin(512);
     EEPROM.write(250, (int)isUpdated);
-    if (isUpdate)
+    if (isUpdated)
         Serial.print("Update flag written");
     EEPROM.commit();
     EEPROM.end();
