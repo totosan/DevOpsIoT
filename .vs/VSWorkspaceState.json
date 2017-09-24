@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\IoTSolution",
-    "\\IoTSolution\\Deployments",
-    "\\IoTWeb",
-    "\\IoTWeb\\IoTWeb"
+    "\\IoTSolution\\Deployments"
   ],
-  "SelectedNode": "\\IoTWeb\\IoTWeb\\Web.Release.config",
   "PreviewInSolutionExplorer": false
 }

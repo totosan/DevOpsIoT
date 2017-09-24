@@ -1,37 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using IoTWeb.Models;
 
 namespace IoTWeb.Controllers
 {
-	public class HomeController : Controller
-	{
-		public ActionResult Index()
+    public class HomeController : Controller
+    {
+        public IActionResult Index()
+        {
+			SetDeviceList();
+
+            return View();
+        }
+
+		private void SetDeviceList()
 		{
+			ViewBag.Devices = new List<string> { "Device1", "Device2" };
+		}
+
+		public IActionResult Overview()
+		{
+			ViewData["Message"] = "See details here...";
+
 			return View();
 		}
 
-		public ActionResult About()
-		{
-			ViewBag.Message = "Your application description page.";
+		public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
 
-			return View();
-		}
+            return View();
+        }
 
-		[HttpPost]
-		public JsonResult UpdateFw(string version)
-		{
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
 
-			return Json("send version:"+version);
-		}
+            return View();
+        }
 
-		public ActionResult Contact()
-		{
-			ViewBag.Message = "Your contact page.";
-
-			return View();
-		}
-	}
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
 }

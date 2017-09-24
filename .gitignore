@@ -3,6 +3,10 @@ logs
 *.log
 npm-debug.log*
 
+# ASP.Net Core
+bin
+obj
+
 # Runtime data
 pids
 *.pid
