@@ -6,6 +6,7 @@
 #include <sys/time.h>
 
 #include "config.h"
+#include "version.h"
 
 #include "sdk/schemaserializer.h"
 
