@@ -100,7 +100,7 @@ void loop()
         }
     }
 
-    const char deviceId[21];
+    char deviceId[21];
     strcpy(deviceId,"ESP");
     strcat(deviceId, MAC_char);
     

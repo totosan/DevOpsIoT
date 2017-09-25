@@ -6,12 +6,7 @@
 #include <sys/time.h>
 
 #include "config.h"
-/*#include "Update.h"*/
 
-/* This sample uses the _LL APIs of iothub_client for example purposes.
-That does not mean that HTTP only works with the _LL APIs.
-Simply changing the using the convenience layer (functions not having _LL)
-and removing calls to _DoWork will yield the same results. */
 #include "sdk/schemaserializer.h"
 
 #ifdef ARDUINO
