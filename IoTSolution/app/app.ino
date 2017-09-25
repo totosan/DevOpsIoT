@@ -100,7 +100,11 @@ void loop()
         }
     }
 
-    simplesample_http_run(A0, connectionString);
+    const char deviceId[21];
+    strcpy(deviceId,"ESP");
+    strcat(deviceId, MAC_char);
+    
+    simplesample_http_run(A0, connectionString, deviceId);
     updateUrl = simplesample_http_getUrl();
     if (updateUrl != 0)
     {

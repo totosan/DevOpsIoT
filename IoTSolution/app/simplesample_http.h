@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-    void simplesample_http_run(int pin, const char * cnnStr);
+    void simplesample_http_run(int pin, const char * cnnStr, const char *deviceId);
     char* simplesample_http_getUrl();
     
 #ifdef __cplusplus

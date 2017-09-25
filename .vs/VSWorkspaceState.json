@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\IoTSolution\\Deployments"
+    "\\IoTSolution",
+    "\\IoTSolution\\app",
+    "\\IoTWeb",
+    "\\IoTWeb\\IoTWeb",
+    "\\IoTWeb\\IoTWeb\\Controllers"
   ],
+  "SelectedNode": "\\IoTWeb\\IoTWeb\\Controllers\\HomeController.cs",
   "PreviewInSolutionExplorer": false
 }

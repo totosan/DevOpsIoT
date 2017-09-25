@@ -29,9 +29,6 @@ and removing calls to _DoWork will yield the same results. */
    !!!  connectionString is injected by config.h
 */
 
-static const char *deviceId = "ESP1";
-static const char *version = "2.04";
-
 static bool g_continueRunning;
 char *m_updateUrl;
 static const short B = 3975; //B value of the thermistor*/
@@ -269,7 +266,7 @@ char *simplesample_http_getUrl()
 //Main function running http messages (sending and receiving msgs)
 //
 //******************************
-void simplesample_http_run(int pin, const char *cnnStr)
+void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
 {
     g_continueRunning = true;
     if (platform_init() != 0)
