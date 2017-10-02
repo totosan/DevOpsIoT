@@ -60,7 +60,7 @@
                     "${workspaceRoot}"
                 ]
             },
-            "intelliSenseMode": "msvc-x64"
+            "intelliSenseMode": "Default"
         }
     ],
     "version": 3
