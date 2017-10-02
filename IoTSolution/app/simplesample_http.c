@@ -17,7 +17,7 @@
 #include "azure_c_shared_utility/platform.h"
 #include "serializer.h"
 #include "iothub_client_ll.h"
-#include "iothubtransportmqtt.h"
+#include "iothubtransporthttp.h"
 #endif
 
 /* 
@@ -61,8 +61,7 @@ DECLARE_MODEL(TestOMeter,
               /* commands, triggered by exteranl*/
               WITH_ACTION(TurnFanOn, int, ID),
               WITH_ACTION(TurnFanOff, int, ID),
-              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version),
-              WITH_METHOD(UpdateFirmware_Method)
+              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
             );
 
 END_NAMESPACE(TestDataNS);
@@ -350,7 +349,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
         {
             int receiveContext = 0;
             printf("Try to connect to IoT Hub with cnnStr %s\r\n", cnnStr);
-            IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(cnnStr, MQTT_Protocol);
+            IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(cnnStr, HTTP_Protocol);
 
             int avgBatteryLevel = 10;
             srand((unsigned int)time(NULL));
@@ -384,11 +383,12 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 {
                     printf("setup direct method callback...\r\n");
                     
-                    if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, myTestOMeter) != IOTHUB_CLIENT_OK)
+/*                     if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
                         (void)printf("ERROR: IoTHubClient_LL_SetDeviceMethodCallback..........FAILED!\r\n");
                     }
-                    else if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
+                    else  */
+                    if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
                         printf("unable to IoTHubClient_SetMessageCallback\r\n");
                     }
