@@ -4,7 +4,7 @@ var sentMessageCount =0;
 Tests.prototype.UpdateFwTest = function (config) {
     var Message = require('azure-iot-common').Message;
     
-    var client = require('azure-iothub').Client.fromConnectionString("HostName=devops005hub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=w9bebr552QhIEPEv19H57kvweKVfEr+/nJEUNdt+5Cc=");
+    var client = require('azure-iothub').Client.fromConnectionString("HostName=devops005hub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=Po66uvbo0MO1mDFXMIk70YWqCTpllt5wwK+8Ao4KpGc=");
 
     // Get device id from IoT device connection string
     var getDeviceId = function (connectionString) {
