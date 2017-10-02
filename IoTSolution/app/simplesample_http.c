@@ -61,7 +61,9 @@ DECLARE_MODEL(TestOMeter,
               /* commands, triggered by exteranl*/
               WITH_ACTION(TurnFanOn, int, ID),
               WITH_ACTION(TurnFanOff, int, ID),
-              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version));
+              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version),
+              WITH_METHOD(UpdateFirmware_Method)
+            );
 
 END_NAMESPACE(TestDataNS);
 
@@ -122,6 +124,14 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
         printf("Firmware is up to date with version %s \r\n", version);
     }
     return EXECUTE_COMMAND_SUCCESS;
+}
+
+METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device){
+    (void)device;
+    (void)printf("Updating firmware by DirectMethod.\r\n");
+
+    METHODRETURN_HANDLE result = MethodReturn_Create(1, "{\"Message\":\"Updating firmware by DirectMethod\"}");
+    return result;
 }
 
 //******************************
@@ -225,7 +235,7 @@ static float getTemperatureFromSensor(int pin)
 /**********************************
 // Device call back method
 **********************************/
-static int DeviceMethodCallback(const char *method_name, const unsigned char *payload, size_t size, unsigned char **response, size_t *resp_size, void *userContextCallback)
+/*static int DeviceMethodCallback(const char *method_name, const unsigned char *payload, size_t size, unsigned char **response, size_t *resp_size, void *userContextCallback)
 {
     (void)userContextCallback;
 
@@ -249,6 +259,69 @@ static int DeviceMethodCallback(const char *method_name, const unsigned char *pa
     }
     g_continueRunning = false;
     return status;
+}*/
+
+static int DeviceMethodCallback(const char* method_name, const unsigned char* payload, size_t size, unsigned char** response, size_t* resp_size, void* userContextCallback)
+{
+    int result;
+
+    /*this is step  3: receive the method and push that payload into serializer (from below)*/
+    char* payloadZeroTerminated = (char*)malloc(size + 1);
+    if (payloadZeroTerminated == 0)
+    {
+        printf("failed to malloc\r\n");
+        *resp_size = 0;
+        *response = NULL;
+        result = -1;
+    }
+    else
+    {
+        (void)memcpy(payloadZeroTerminated, payload, size);
+        payloadZeroTerminated[size] = '\0';
+
+        /*execute method - userContextCallback is of type deviceModel*/
+        METHODRETURN_HANDLE methodResult = EXECUTE_METHOD(userContextCallback, method_name, payloadZeroTerminated);
+        free(payloadZeroTerminated);
+
+        if (methodResult == NULL)
+        {
+            printf("failed to EXECUTE_METHOD\r\n");
+            *resp_size = 0;
+            *response = NULL;
+            result = -1;
+        }
+        else
+        {
+            /* get the serializer answer and push it in the networking stack*/
+            const METHODRETURN_DATA* data = MethodReturn_GetReturn(methodResult);
+            if (data == NULL)
+            {
+                printf("failed to MethodReturn_GetReturn\r\n");
+                *resp_size = 0;
+                *response = NULL;
+                result = -1;
+            }
+            else
+            {
+                result = data->statusCode;
+                if (data->jsonValue == NULL)
+                {
+                    char* resp = "{}";
+                    *resp_size = strlen(resp);
+                    *response = (unsigned char*)malloc(*resp_size);
+                    (void)memcpy(*response, resp, *resp_size);
+                }
+                else
+                {
+                    *resp_size = strlen(data->jsonValue);
+                    *response = (unsigned char*)malloc(*resp_size);
+                    (void)memcpy(*response, data->jsonValue, *resp_size);
+                }
+            }
+            MethodReturn_Destroy(methodResult);
+        }
+    }
+    return result;
 }
 
 char *simplesample_http_getUrl()
@@ -309,7 +382,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 else
                 {
 
-                    if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, &receiveContext) != IOTHUB_CLIENT_OK)
+                    if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
                         (void)printf("ERROR: IoTHubClient_LL_SetDeviceMethodCallback..........FAILED!\r\n");
                     }
