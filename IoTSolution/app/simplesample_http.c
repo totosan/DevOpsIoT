@@ -20,7 +20,6 @@
 #include "iothubtransporthttp.h"
 #endif
 
-
 /* 
    !!!  connectionString is injected by config.h
 */
@@ -114,10 +113,9 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
     {
         /* Updater *updater_instance = Updater_create();
         Updater_do(&updater_instance, url);*/
- 
+
         g_continueRunning = false;
         m_updateUrl = strdup(url);
-     
     }
     else
     {
@@ -132,9 +130,9 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
 void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
     unsigned int messageTrackingId = (unsigned int)(uintptr_t)userContextCallback;
-digitalWrite(LED,HIGH);
-delay(1000);
-digitalWrite(LED,LOW);
+    digitalWrite(LED, HIGH);
+    delay(1000);
+    digitalWrite(LED, LOW);
 
     // (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
 
@@ -311,7 +309,11 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 else
                 {
 
-                    if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
+                    if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, &receiveContext) != IOTHUB_CLIENT_OK)
+                    {
+                        (void)printf("ERROR: IoTHubClient_LL_SetDeviceMethodCallback..........FAILED!\r\n");
+                    }
+                    else if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
                         printf("unable to IoTHubClient_SetMessageCallback\r\n");
                     }
@@ -324,8 +326,8 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
 
                         do
                         {
-  
-                            myTestOMeter->BatteryLevel = avgBatteryLevel;/* + (rand() % 4 + 2);*/
+
+                            myTestOMeter->BatteryLevel = avgBatteryLevel; /* + (rand() % 4 + 2);*/
                             myTestOMeter->Temperature = analogRead(pin);
                             myTestOMeter->dtime = "";
 
