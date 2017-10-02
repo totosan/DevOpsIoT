@@ -17,7 +17,7 @@
 #include "azure_c_shared_utility/platform.h"
 #include "serializer.h"
 #include "iothub_client_ll.h"
-#include "iothubtransporthttp.h"
+#include "iothubtransportmqtt.h"
 #endif
 
 /* 
@@ -350,7 +350,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
         {
             int receiveContext = 0;
             printf("Try to connect to IoT Hub with cnnStr %s\r\n", cnnStr);
-            IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(cnnStr, HTTP_Protocol);
+            IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(cnnStr, MQTT_Protocol);
 
             int avgBatteryLevel = 10;
             srand((unsigned int)time(NULL));
@@ -373,7 +373,8 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 {
                     printf("failure to set option \"MinimumPollingTime\"\r\n");
                 }
-
+                printf("Creating model instance..\r\n");
+                
                 myTestOMeter = CREATE_MODEL_INSTANCE(TestDataNS, TestOMeter);
                 if (myTestOMeter == NULL)
                 {
@@ -381,7 +382,8 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 }
                 else
                 {
-
+                    printf("setup direct method callback...\r\n");
+                    
                     if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
                         (void)printf("ERROR: IoTHubClient_LL_SetDeviceMethodCallback..........FAILED!\r\n");
