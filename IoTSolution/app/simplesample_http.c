@@ -355,7 +355,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                                                   myTestOMeter->Temperature,
                                                   myTestOMeter->dtime) != CODEFIRST_OK)
                                     {
-                                        (void)printf("Failed to serialize\r\n");
+                                        (void)printf("Failed to serialize%s","\r\n");
                                     }
                                     else
                                     {
@@ -395,9 +395,8 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                             IoTHubClient_LL_DoWork(iotHubClientHandle);
                             ThreadAPI_Sleep(m_uploadInterval);
                             m_counter++;
-                            (void)printf("counter++%d,", m_counter);
-
                         } while (g_continueRunning);
+                        (void)printf("Quitted loop!%s","\r\n");
                     }
                     DESTROY_MODEL_INSTANCE(myTestOMeter);
                 }
