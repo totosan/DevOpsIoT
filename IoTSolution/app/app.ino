@@ -20,6 +20,7 @@
 #include <AzureIoTHub.h>
 #include <AzureIoTUtility.h>
 #include <AzureIoTProtocol_HTTP.h>
+#include <AzureIoTProtocol_MQTT.h>
 
 #include "simplesample_http.h"
 #include "config.h"
