@@ -27,7 +27,8 @@
 static bool g_continueRunning;
 char *m_updateUrl;
 static const short B = 3975; //B value of the thermistor*/
-static int m_uploadInterval = 10000;
+static int m_uploadInterval = 100;
+static int m_counter = 0;
 static int LED = 5;
 
 typedef struct EVENT_INSTANCE_TAG
@@ -61,9 +62,9 @@ DECLARE_MODEL(TestOMeter,
               /* commands, triggered by exteranl*/
               WITH_ACTION(TurnFanOn, int, ID),
               WITH_ACTION(TurnFanOff, int, ID),
-              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version),
-              WITH_METHOD(UpdateFirmware_Method)
-            );
+              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
+              /*WITH_METHOD(UpdateFirmware_Method)*/
+              );
 
 END_NAMESPACE(TestDataNS);
 
@@ -126,9 +127,10 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
     return EXECUTE_COMMAND_SUCCESS;
 }
 
-METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device){
+METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device)
+{
     (void)device;
-    (void)printf("Updating firmware by DirectMethod.\r\n");
+    (void)printf("Updating firmware by DirectMethod.%s\r\n", "");
 
     METHODRETURN_HANDLE result = MethodReturn_Create(1, "{\"Message\":\"Updating firmware by DirectMethod\"}");
     return result;
@@ -235,7 +237,7 @@ static float getTemperatureFromSensor(int pin)
 /**********************************
 // Device call back method
 **********************************/
-/*static int DeviceMethodCallback(const char *method_name, const unsigned char *payload, size_t size, unsigned char **response, size_t *resp_size, void *userContextCallback)
+static int DeviceMethodCallback(const char *method_name, const unsigned char *payload, size_t size, unsigned char **response, size_t *resp_size, void *userContextCallback)
 {
     (void)userContextCallback;
 
@@ -259,69 +261,6 @@ static float getTemperatureFromSensor(int pin)
     }
     g_continueRunning = false;
     return status;
-}*/
-
-static int DeviceMethodCallback(const char* method_name, const unsigned char* payload, size_t size, unsigned char** response, size_t* resp_size, void* userContextCallback)
-{
-    int result;
-
-    /*this is step  3: receive the method and push that payload into serializer (from below)*/
-    char* payloadZeroTerminated = (char*)malloc(size + 1);
-    if (payloadZeroTerminated == 0)
-    {
-        printf("failed to malloc\r\n");
-        *resp_size = 0;
-        *response = NULL;
-        result = -1;
-    }
-    else
-    {
-        (void)memcpy(payloadZeroTerminated, payload, size);
-        payloadZeroTerminated[size] = '\0';
-
-        /*execute method - userContextCallback is of type deviceModel*/
-        METHODRETURN_HANDLE methodResult = EXECUTE_METHOD(userContextCallback, method_name, payloadZeroTerminated);
-        free(payloadZeroTerminated);
-
-        if (methodResult == NULL)
-        {
-            printf("failed to EXECUTE_METHOD\r\n");
-            *resp_size = 0;
-            *response = NULL;
-            result = -1;
-        }
-        else
-        {
-            /* get the serializer answer and push it in the networking stack*/
-            const METHODRETURN_DATA* data = MethodReturn_GetReturn(methodResult);
-            if (data == NULL)
-            {
-                printf("failed to MethodReturn_GetReturn\r\n");
-                *resp_size = 0;
-                *response = NULL;
-                result = -1;
-            }
-            else
-            {
-                result = data->statusCode;
-                if (data->jsonValue == NULL)
-                {
-                    char* resp = "{}";
-                    *resp_size = strlen(resp);
-                    *response = (unsigned char*)malloc(*resp_size);
-                    (void)memcpy(*response, resp, *resp_size);
-                }
-                else
-                {
-                    *resp_size = strlen(data->jsonValue);
-                    *response = (unsigned char*)malloc(*resp_size);
-                    (void)memcpy(*response, data->jsonValue, *resp_size);
-                }
-            }
-            MethodReturn_Destroy(methodResult);
-        }
-    }
-    return result;
 }
 
 char *simplesample_http_getUrl()
@@ -371,10 +310,10 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
 
                 if (IoTHubClient_LL_SetOption(iotHubClientHandle, "MinimumPollingTime", &minimumPollingTime) != IOTHUB_CLIENT_OK)
                 {
-                    printf("failure to set option \"MinimumPollingTime\"\r\n");
+                    (void)printf("failure to set option \"MinimumPollingTime\" %s\r\n", minimumPollingTime);
                 }
-                printf("Creating model instance..\r\n");
-                
+                printf("Creating model instance..%s\r\n", "");
+
                 myTestOMeter = CREATE_MODEL_INSTANCE(TestDataNS, TestOMeter);
                 if (myTestOMeter == NULL)
                 {
@@ -382,16 +321,15 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 }
                 else
                 {
-                    printf("setup direct method callback...\r\n");
-                    
-                     if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, myTestOMeter) != IOTHUB_CLIENT_OK)
+                    (void)printf("setup direct method callback...%s\r\n", "");
+
+                    if (IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, DeviceMethodCallback, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
-                        (void)printf("ERROR: IoTHubClient_LL_SetDeviceMethodCallback..........FAILED!\r\n");
+                        (void)printf("ERROR: IoTHubClient_LL_SetDeviceMethodCallback..........FAILED!%s\r\n", "");
                     }
-                    else  
-                    if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
+                    else if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
-                        printf("unable to IoTHubClient_SetMessageCallback\r\n");
+                        (void)printf("unable to IoTHubClient_SetMessageCallback\r\n");
                     }
                     else
                     {
@@ -402,55 +340,62 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
 
                         do
                         {
-
-                            myTestOMeter->BatteryLevel = avgBatteryLevel; /* + (rand() % 4 + 2);*/
-                            myTestOMeter->Temperature = analogRead(pin);
-                            myTestOMeter->dtime = "";
-
+                            if (m_counter >= 100)
                             {
-                                unsigned char *destination;
-                                size_t destinationSize;
-                                if (SERIALIZE(&destination, &destinationSize,
-                                              myTestOMeter->DeviceId,
-                                              myTestOMeter->BatteryLevel,
-                                              myTestOMeter->Temperature,
-                                              myTestOMeter->dtime) != CODEFIRST_OK)
+                                myTestOMeter->BatteryLevel = avgBatteryLevel; /* + (rand() % 4 + 2);*/
+                                myTestOMeter->Temperature = analogRead(pin);
+                                myTestOMeter->dtime = "";
+
                                 {
-                                    (void)printf("Failed to serialize\r\n");
-                                }
-                                else
-                                {
-                                    /* char *temp = malloc(destinationSize + 1);
-                                    memcpy(temp, destination, destinationSize);
-                                    temp[destinationSize] = "\0";*/
-                                    /*printf("Message: %s\r\n", temp);*/
-                                    IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(destination, destinationSize);
-                                    if (messageHandle == NULL)
+                                    unsigned char *destination;
+                                    size_t destinationSize;
+                                    if (SERIALIZE(&destination, &destinationSize,
+                                                  myTestOMeter->DeviceId,
+                                                  myTestOMeter->BatteryLevel,
+                                                  myTestOMeter->Temperature,
+                                                  myTestOMeter->dtime) != CODEFIRST_OK)
                                     {
-                                        printf("unable to create a new IoTHubMessage\r\n");
+                                        (void)printf("Failed to serialize\r\n");
                                     }
                                     else
                                     {
-                                        if (IoTHubClient_LL_SendEventAsync(iotHubClientHandle, messageHandle, sendCallback, (void *)1) != IOTHUB_CLIENT_OK)
+
+                                        /* char *temp = malloc(destinationSize + 1);
+                                    memcpy(temp, destination, destinationSize);
+                                    temp[destinationSize] = "\0";*/
+                                        /*printf("Message: %s\r\n", temp);*/
+                                        IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(destination, destinationSize);
+                                        if (messageHandle == NULL)
                                         {
-                                            printf("failed to hand over the message to IoTHubClient\r\n");
+                                            (void)printf("unable to create a new IoTHubMessage%s\r\n", "");
                                         }
                                         else
                                         {
-                                            printf("IoTHubClient accepted the message for delivery\r\n");
-                                            /*digitalWrite(5, !digitalRead(5));*/
-                                        }
+                                            (void)printf("Sending message...%s", "\r\n");
 
-                                        IoTHubMessage_Destroy(messageHandle);
+                                            if (IoTHubClient_LL_SendEventAsync(iotHubClientHandle, messageHandle, sendCallback, (void *)1) != IOTHUB_CLIENT_OK)
+                                            {
+                                                (void)printf("failed to hand over the message to IoTHubClient%s\r\n", "");
+                                            }
+                                            else
+                                            {
+                                                (void)printf("IoTHubClient accepted the message for delivery%s", "\r\n");
+                                            }
+
+                                            IoTHubMessage_Destroy(messageHandle);
+                                        }
+                                        free(destination);
                                     }
-                                    free(destination);
                                 }
-                            }
+                                m_counter =0;
+                            } //counter >= 100
 
                             /* wait for commands */
 
                             IoTHubClient_LL_DoWork(iotHubClientHandle);
                             ThreadAPI_Sleep(m_uploadInterval);
+                            m_counter++;
+                            (void)printf("counter++%d,", m_counter);
 
                         } while (g_continueRunning);
                     }

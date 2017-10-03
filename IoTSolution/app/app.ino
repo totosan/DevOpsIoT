@@ -362,6 +362,13 @@ void initSerial()
 void initWifi()
 {
 
+    WiFi.macAddress(MAC_array);
+    for (int i = 0; i < sizeof(MAC_array); ++i)
+    {
+        sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
+    }
+    Serial.println(MAC_char);
+
     // check for the presence of the shield :
     if (WiFi.status() == WL_NO_SHIELD)
     {
