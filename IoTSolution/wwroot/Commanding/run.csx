@@ -26,26 +26,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     var connectionString = GetEnvironmentVariable("devopsIoTHubRegistryConnection").Split(':')[1].Trim();
     var firmwareUrl = GetEnvironmentVariable("firmwareUrl").Replace(": ", ";").Split(';')[1].Trim();
 
-    jobClient = JobClient.CreateFromConnectionString(connectionString);
+    var message = new Message(System.Text.ASCIIEncoding.ASCII.GetBytes(@"{""Name"":""UpdateFirmware"",""Parameters"":{""url"":""http://devops005storage.blob.core.windows.net/devops-iot-firmware/app.ino.bin"",""version"":""2.06""}}"));
 
-    log.Info("All Env-Vars retrueved");
-    
-    var dmethod = new CloudToDeviceMethod("UpdateFirmware");
-    dmethod.SetPayloadJson(
-         @"{
-             Parameters : {
-                 'url':'http://devops005storage.blob.core.windows.net/devops-iot-firmware/app.ino.bin',
-                 'version':'2.05'
-             }
-         }");
-    
-    log.Info($"Method generated");
-    
-    JobResponse result = await jobClient.ScheduleDeviceMethodAsync(Guid.NewGuid().ToString(),
-        "deviceId='ESP5ccf7f2cb436'",
-        dmethod,
-        DateTime.Now,
-        10);
+    registryManager = RegistryManager.CreateFromConnectionString(connectionString);
+    client = ServiceClient.CreateFromConnectionString(connectionString);
+
+    var devices = await registryManager.GetDevicesAsync(100);
+    foreach(var device in devices){
+        log.Info($"Device Id: {device.Id}");
+        await client.SendAsync(device.Id,message);
+    }
     
     log.Info("job done");
     return req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body");
