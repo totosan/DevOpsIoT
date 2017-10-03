@@ -61,7 +61,8 @@ DECLARE_MODEL(TestOMeter,
               /* commands, triggered by exteranl*/
               WITH_ACTION(TurnFanOn, int, ID),
               WITH_ACTION(TurnFanOff, int, ID),
-              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
+              WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version),
+              WITH_METHOD(UpdateFirmware_Method)
             );
 
 END_NAMESPACE(TestDataNS);
