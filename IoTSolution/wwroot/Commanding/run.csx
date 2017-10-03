@@ -13,10 +13,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
    log.Info("C# HTTP trigger function processed a request.");
 
     // parse query parameter
-    string mac = req.GetQueryNameValuePairs()
-        .FirstOrDefault(q => string.Compare(q.Key, "mac", true) == 0)
+    string number = req.GetQueryNameValuePairs()
+        .FirstOrDefault(q => string.Compare(q.Key, "number", true) == 0)
         .Value;
 
+    log.Info($"parameter number was {number}");
     // Get request body
     
     //dynamic data = await req.Content.ReadAsAsync<object>();
@@ -32,13 +33,19 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     client = ServiceClient.CreateFromConnectionString(connectionString);
 
     var devices = await registryManager.GetDevicesAsync(100);
+    int i=0;
     foreach(var device in devices){
-        log.Info($"Device Id: {device.Id}");
-        await client.SendAsync(device.Id,message);
+        if(i==number)
+            break;
+        i++;
+        if(device.Status == DeviceStatus.Enabled){
+            log.Info($"Device Id: {device.Id}");
+            await client.SendAsync(device.Id,message);
+        }
     }
     
     log.Info("job done");
-    return req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body");
+    return req.CreateResponse(HttpStatusCode.OK, "Command sent!");
 }
 
 public static string GetEnvironmentVariable(string name)
