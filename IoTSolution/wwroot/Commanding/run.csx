@@ -13,9 +13,10 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
    log.Info("C# HTTP trigger function processed a request.");
 
     // parse query parameter
-    string number = req.GetQueryNameValuePairs()
+    int number;
+    int.TryParse(req.GetQueryNameValuePairs()
         .FirstOrDefault(q => string.Compare(q.Key, "number", true) == 0)
-        .Value;
+        .Value,out number);
 
     log.Info($"parameter number was {number}");
     // Get request body
