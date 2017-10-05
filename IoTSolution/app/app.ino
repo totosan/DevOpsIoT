@@ -20,6 +20,7 @@
 #include <AzureIoTHub.h>
 #include <AzureIoTUtility.h>
 #include <AzureIoTProtocol_HTTP.h>
+#include <AzureIoTProtocol_MQTT.h>
 
 #include "simplesample_http.h"
 #include "config.h"
@@ -62,7 +63,8 @@ void setup()
         digitalWrite(LED_SIGNAL, HIGH);
         SaveUpdateFlag(false);
         UpdateIt();
-    }else
+    }
+    else
     {
         digitalWrite(LED_SIGNAL, LOW);
     }
@@ -74,12 +76,33 @@ void setup()
     Serial.println(ESP.getFreeSketchSpace());
 }
 
+/*--------------------------------------------------
+|   Main Loop
+*--------------------------------------------------*/
 void loop()
 {
     Serial.println("Flash memory:     " + String(ESP.getFlashChipSize()) + " Bytes.");
     Serial.println("Free heap memory: " + String(ESP.getFreeHeap()) + " Bytes.");
     Serial.println("Chip speed:       " + String(ESP.getFlashChipSpeed()) + " Hz.");
 
+    HandleUpdate();
+
+    char deviceId[21];
+    strcpy(deviceId, "ESP");
+    strcat(deviceId, MAC_char);
+
+    simplesample_http_run(A0, connectionString, deviceId);
+    
+    updateUrl = simplesample_http_getUrl();
+    if (updateUrl != 0)
+    {
+        SaveUpdateFlag(true);
+        ESP.restart();
+    }
+}
+
+void HandleUpdate()
+{
     if (updateUrl != 0)
     {
         t_httpUpdate_return ret = ESPhttpUpdate.update(updateUrl);
@@ -98,18 +121,6 @@ void loop()
             Serial.println("HTTP_UPDATE_OK");
             break;
         }
-    }
-
-    char deviceId[21];
-    strcpy(deviceId,"ESP");
-    strcat(deviceId, MAC_char);
-    
-    simplesample_http_run(A0, connectionString, deviceId);
-    updateUrl = simplesample_http_getUrl();
-    if (updateUrl != 0)
-    {
-        SaveUpdateFlag(true);
-        ESP.restart();
     }
 }
 
@@ -350,6 +361,13 @@ void initSerial()
 
 void initWifi()
 {
+
+    WiFi.macAddress(MAC_array);
+    for (int i = 0; i < sizeof(MAC_array); ++i)
+    {
+        sprintf(MAC_char, "%s%02x", MAC_char, MAC_array[i]);
+    }
+    Serial.println(MAC_char);
 
     // check for the presence of the shield :
     if (WiFi.status() == WL_NO_SHIELD)
