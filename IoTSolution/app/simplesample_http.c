@@ -112,7 +112,7 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
 
     int compareResult = strcmp(version, device->Version);
     printf("compare restult between device->Version (%s) and version from command (%s) is %d \r\n", device->Version, version, compareResult);
-    if (compareResult > 0)
+    if (true && compareResult > 0)
     {
         /* Updater *updater_instance = Updater_create();
         Updater_do(&updater_instance, url);*/
@@ -142,10 +142,11 @@ METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device)
 void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
     unsigned int messageTrackingId = (unsigned int)(uintptr_t)userContextCallback;
-    digitalWrite(LED, HIGH);
-    delay(1000);
-    digitalWrite(LED, LOW);
-
+    for(int i=0;i<5;i++){
+        digitalWrite(LED, HIGH);
+        delay(300);
+        digitalWrite(LED, LOW);
+    }
     // (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
 
     // (void)printf("Result Call Back Called! Result is: %s \r\n", ENUM_TO_STRING(IOTHUB_CLIENT_CONFIRMATION_RESULT, result));

@@ -76,9 +76,9 @@ void setup()
     Serial.println(ESP.getFreeSketchSpace());
 }
 
-/*--------------------------------------------------
+/*##################################################
 |   Main Loop
-*--------------------------------------------------*/
+*##################################################*/
 void loop()
 {
     Serial.println("Flash memory:     " + String(ESP.getFlashChipSize()) + " Bytes.");

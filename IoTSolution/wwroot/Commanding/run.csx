@@ -13,10 +13,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
    log.Info("C# HTTP trigger function processed a request.");
 
     // parse query parameter
+<<<<<<< HEAD
     int number;
     int.TryParse(req.GetQueryNameValuePairs()
         .FirstOrDefault(q => string.Compare(q.Key, "number", true) == 0)
         .Value,out number);
+=======
+    string number = req.GetQueryNameValuePairs()
+        .FirstOrDefault(q => string.Compare(q.Key, "number", true) == 0)
+        .Value;
+>>>>>>> firmware
 
     log.Info($"parameter number was {number}");
     // Get request body
