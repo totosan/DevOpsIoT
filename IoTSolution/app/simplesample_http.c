@@ -112,7 +112,7 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
 
     int compareResult = strcmp(version, device->Version);
     printf("compare restult between device->Version (%s) and version from command (%s) is %d \r\n", device->Version, version, compareResult);
-    if (compareResult > 0)
+    if (true && compareResult > 0)
     {
         /* Updater *updater_instance = Updater_create();
         Updater_do(&updater_instance, url);*/
