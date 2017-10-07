@@ -142,11 +142,11 @@ METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device)
 void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
     unsigned int messageTrackingId = (unsigned int)(uintptr_t)userContextCallback;
-     for(int i=0;i<5;i++){
+     for(int i=0;i<3;i++){
         digitalWrite(LED, HIGH);
-        delay(300);
+        delay(100);
         digitalWrite(LED, LOW);
-        delay(300);
+        delay(100);
         (void)printf("Blink%s","\r\n");
     } 
      (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
