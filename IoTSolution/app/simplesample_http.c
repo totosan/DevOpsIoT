@@ -61,8 +61,8 @@ DECLARE_MODEL(TestOMeter,
               WITH_DATA(ascii_char_ptr_no_quotes, Commands),*/
 
               /* commands, triggered by exteranl*/
-              WITH_ACTION(TurnFanOn, int, ID),
-              WITH_ACTION(TurnFanOff, int, ID),
+              WITH_ACTION(TurnBuzzerO),
+              WITH_ACTION(TurnBuzzerOff),
               WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
               /*WITH_METHOD(UpdateFirmware_Method)*/
               );
@@ -72,20 +72,22 @@ END_NAMESPACE(TestDataNS);
 //******************************
 //turning Fan On
 //******************************
-EXECUTE_COMMAND_RESULT TurnFanOn(TestOMeter *device, int ID)
+EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device)
 {
     (void)device;
-    (void)printf("Turning fan on.\r\n");
+    tone(2,1000);    
+    (void)printf("Turning Buzzer on.\r\n");
     return EXECUTE_COMMAND_SUCCESS;
 }
 
 //******************************
 //turning Fan Off
 //******************************
-EXECUTE_COMMAND_RESULT TurnFanOff(TestOMeter *device, int ID)
+EXECUTE_COMMAND_RESULT TurnBuzzerOff(TestOMeter *device)
 {
     (void)device;
-    (void)printf("Turning fan off.\r\n");
+    noTone(2);
+    (void)printf("Turning Buzzer off.\r\n");
     return EXECUTE_COMMAND_SUCCESS;
 }
 
