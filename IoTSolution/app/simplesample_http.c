@@ -142,13 +142,13 @@ METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device)
 void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
     unsigned int messageTrackingId = (unsigned int)(uintptr_t)userContextCallback;
-    for(int i=0;i<5;i++){
+    /* for(int i=0;i<5;i++){
         digitalWrite(LED, HIGH);
         delay(300);
         digitalWrite(LED, LOW);
         delay(300);
         printf("Blink%s","\r\n");
-    }
+    } */
     // (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
 
     // (void)printf("Result Call Back Called! Result is: %s \r\n", ENUM_TO_STRING(IOTHUB_CLIENT_CONFIRMATION_RESULT, result));
@@ -179,6 +179,13 @@ static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, const unsign
     }
     free((void *)buffer);
     messageTrackingId++;
+    for(int i=0;i<5;i++){
+        digitalWrite(LED, HIGH);
+        delay(300);
+        digitalWrite(LED, LOW);
+        delay(300);
+        printf("Blink%s","\r\n");
+    }
 }
 
 /*********************************
