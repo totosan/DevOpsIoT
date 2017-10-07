@@ -149,7 +149,7 @@ void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCal
         delay(300);
         printf("Blink%s","\r\n");
     } */
-    // (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
+     (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
 
     // (void)printf("Result Call Back Called! Result is: %s \r\n", ENUM_TO_STRING(IOTHUB_CLIENT_CONFIRMATION_RESULT, result));
 }
@@ -179,13 +179,6 @@ static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, const unsign
     }
     free((void *)buffer);
     messageTrackingId++;
-    for(int i=0;i<5;i++){
-        digitalWrite(LED, HIGH);
-        delay(300);
-        digitalWrite(LED, LOW);
-        delay(300);
-        printf("Blink%s","\r\n");
-    }
 }
 
 /*********************************
@@ -198,7 +191,7 @@ static IOTHUBMESSAGE_DISPOSITION_RESULT IoTHubMessage(IOTHUB_MESSAGE_HANDLE mess
     size_t size;
     if (IoTHubMessage_GetByteArray(message, &buffer, &size) != IOTHUB_MESSAGE_OK)
     {
-        printf("unable to IoTHubMessage_GetByteArray\r\n");
+        printf("unable to IoTHubMessage_GetByteArray%s","\r\n");
         result = EXECUTE_COMMAND_ERROR;
     }
     else
@@ -208,7 +201,7 @@ static IOTHUBMESSAGE_DISPOSITION_RESULT IoTHubMessage(IOTHUB_MESSAGE_HANDLE mess
         char *temp = malloc(size + 1);
         if (temp == NULL)
         {
-            printf("failed to malloc\r\n");
+            printf("failed to malloc%s","\r\n");
             result = EXECUTE_COMMAND_ERROR;
         }
         else
@@ -327,7 +320,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 myTestOMeter = CREATE_MODEL_INSTANCE(TestDataNS, TestOMeter);
                 if (myTestOMeter == NULL)
                 {
-                    (void)printf("Failed on CREATE_MODEL_INSTANCE\r\n");
+                    (void)printf("Failed on CREATE_MODEL_INSTANCE%s","\r\n");
                 }
                 else
                 {
@@ -339,7 +332,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                     }
                     else if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
-                        (void)printf("unable to IoTHubClient_SetMessageCallback\r\n");
+                        (void)printf("unable to IoTHubClient_SetMessageCallback%s","\r\n");
                     }
                     else
                     {
