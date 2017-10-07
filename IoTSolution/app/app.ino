@@ -34,7 +34,7 @@
 */
 ESP8266WiFiMulti WiFiMulti;
 
-static int LED = LED_BUILTIN;
+static int LED = 2;
 static int LED_SIGNAL = 5;
 
 static WiFiClientSecure sslClient; // for ESP8266
@@ -51,13 +51,14 @@ void setup()
 {
 
     pinMode(LED, OUTPUT);
+    pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED_SIGNAL, OUTPUT);
     pinMode(A0, INPUT);
 
     initSerial();
 
     eeprom_used_len = LoadConfig(512);
-    Serial.print("Check for Update flag!");
+    Serial.print("Check for Update flag!\r\n");
     if (LoadUpdateFlag())
     {
         digitalWrite(LED_SIGNAL, HIGH);
@@ -92,7 +93,7 @@ void loop()
     strcat(deviceId, MAC_char);
 
     simplesample_http_run(A0, connectionString, deviceId);
-    
+
     updateUrl = simplesample_http_getUrl();
     if (updateUrl != 0)
     {
@@ -254,18 +255,17 @@ int LoadConfig(int sizeEEPROM)
         Serial.println(buffer[c-1]);*/
     } while (c <= sizeFromEEPROM && buffer[c - 1] != '\0');
 
-    //buffer[sizeFromEEPROM] = '\0';
-    Serial.printf("[EEPROM]     after reading to buffer: %s\n", buffer);
-
+    /*Serial.printf("[EEPROM]     after reading to buffer: %s\n", buffer);
+*/
     if (buffer[0] != '\0')
     {
         char *buffer2 = strdup(buffer);
         connectionString = strdup(getValue(buffer2, '|', 0));
         ssid = strdup(getValue(buffer2, '|', 1));
         pass = strdup(getValue(buffer2, '|', 2));
-        Serial.printf("[EEPROM]     new connectionStr:[%s]\n", connectionString);
+        /* Serial.printf("[EEPROM]     new connectionStr:[%s]\n", connectionString);
         Serial.printf("[EEPROM]     new SSID:[%s]\n", ssid);
-        Serial.printf("[EEPROM]     new pass:[%s]\n", pass);
+        Serial.printf("[EEPROM]     new pass:[%s]\n", pass); */
         splitString(buffer);
     }
     else
@@ -307,24 +307,20 @@ char *getValue(char *data, char separator, int index)
     int found = 0;
     int strIndex[] = {0, -1};
     int maxIndex = strlen(data) - 1;
-    Serial.printf("maxIndex: %d\n", maxIndex);
-    Serial.printf("strIndex[0]:%d strIndex[1]:%d\n", strIndex[0], strIndex[1]);
+
     for (int i = 0; i <= maxIndex && found <= index; i++)
     {
         // Serial.printf("i: %d, ", i);
         if (data[i] == separator || i == maxIndex)
         {
             found++;
-            Serial.printf("found:%d\n", found);
 
             strIndex[0] = strIndex[1] + 1;
             strIndex[1] = (i == maxIndex) ? i + 1 : i;
-            Serial.printf("strIndex[0]:%d strIndex[1]:%d\n", strIndex[0], strIndex[1]);
         }
     }
 
     int length = strIndex[1] - strIndex[0];
-    Serial.printf("length:%d\n", length);
     char buffer[length];
     if (found > index)
     {
@@ -346,7 +342,6 @@ char *splitString(char *text)
     ptr = strtok(copyText, "|");
     while (ptr != NULL)
     {
-        Serial.printf("[Token %s]\n", ptr);
         ptr = strtok(NULL, "|");
     }
     return NULL;
