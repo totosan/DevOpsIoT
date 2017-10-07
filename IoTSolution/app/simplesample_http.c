@@ -30,6 +30,7 @@ static const short B = 3975; //B value of the thermistor*/
 static int m_uploadInterval = 100;
 static int m_counter = 0;
 static int LED = 5;
+static int BUILDIN_LED = 2;
 
 typedef struct EVENT_INSTANCE_TAG
 {
@@ -346,9 +347,9 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                         {
                             if (m_counter % 10==0)
                             {
-                                digitalWrite(LED,HIGH);
+                                digitalWrite(BUILDIN_LED,HIGH);
                                 delay(70);
-                                digitalWrite(LED,LOW);
+                                digitalWrite(BUILDIN_LED,LOW);
                             }
 
                             if (m_counter >= 100)
