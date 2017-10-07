@@ -30,6 +30,7 @@ static const short B = 3975; //B value of the thermistor*/
 static int m_uploadInterval = 100;
 static int m_counter = 0;
 static int LED = 5;
+static int BUILDIN_LED = 2;
 
 typedef struct EVENT_INSTANCE_TAG
 {
@@ -142,12 +143,15 @@ METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device)
 void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
     unsigned int messageTrackingId = (unsigned int)(uintptr_t)userContextCallback;
-    for(int i=0;i<5;i++){
+    for (int i = 0; i < 3; i++)
+    {
         digitalWrite(LED, HIGH);
-        delay(300);
+        delay(100);
         digitalWrite(LED, LOW);
+        delay(100);
+        (void)printf("Blink%s", "\r\n");
     }
-    // (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
+    (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
 
     // (void)printf("Result Call Back Called! Result is: %s \r\n", ENUM_TO_STRING(IOTHUB_CLIENT_CONFIRMATION_RESULT, result));
 }
@@ -189,7 +193,7 @@ static IOTHUBMESSAGE_DISPOSITION_RESULT IoTHubMessage(IOTHUB_MESSAGE_HANDLE mess
     size_t size;
     if (IoTHubMessage_GetByteArray(message, &buffer, &size) != IOTHUB_MESSAGE_OK)
     {
-        printf("unable to IoTHubMessage_GetByteArray\r\n");
+        printf("unable to IoTHubMessage_GetByteArray%s", "\r\n");
         result = EXECUTE_COMMAND_ERROR;
     }
     else
@@ -199,7 +203,7 @@ static IOTHUBMESSAGE_DISPOSITION_RESULT IoTHubMessage(IOTHUB_MESSAGE_HANDLE mess
         char *temp = malloc(size + 1);
         if (temp == NULL)
         {
-            printf("failed to malloc\r\n");
+            printf("failed to malloc%s", "\r\n");
             result = EXECUTE_COMMAND_ERROR;
         }
         else
@@ -318,7 +322,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                 myTestOMeter = CREATE_MODEL_INSTANCE(TestDataNS, TestOMeter);
                 if (myTestOMeter == NULL)
                 {
-                    (void)printf("Failed on CREATE_MODEL_INSTANCE\r\n");
+                    (void)printf("Failed on CREATE_MODEL_INSTANCE%s", "\r\n");
                 }
                 else
                 {
@@ -330,7 +334,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                     }
                     else if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, IoTHubMessage, myTestOMeter) != IOTHUB_CLIENT_OK)
                     {
-                        (void)printf("unable to IoTHubClient_SetMessageCallback\r\n");
+                        (void)printf("unable to IoTHubClient_SetMessageCallback%s", "\r\n");
                     }
                     else
                     {
@@ -341,6 +345,13 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
 
                         do
                         {
+                            if (m_counter % 10==0)
+                            {
+                                digitalWrite(BUILDIN_LED,HIGH);
+                                delay(70);
+                                digitalWrite(BUILDIN_LED,LOW);
+                            }
+
                             if (m_counter >= 100)
                             {
                                 myTestOMeter->BatteryLevel = avgBatteryLevel; /* + (rand() % 4 + 2);*/
@@ -356,7 +367,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                                                   myTestOMeter->Temperature,
                                                   myTestOMeter->dtime) != CODEFIRST_OK)
                                     {
-                                        (void)printf("Failed to serialize%s","\r\n");
+                                        (void)printf("Failed to serialize%s", "\r\n");
                                     }
                                     else
                                     {
@@ -388,7 +399,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                                         free(destination);
                                     }
                                 }
-                                m_counter =0;
+                                m_counter = 0;
                             } //counter >= 100
 
                             /* wait for commands */
@@ -397,7 +408,7 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                             ThreadAPI_Sleep(m_uploadInterval);
                             m_counter++;
                         } while (g_continueRunning);
-                        (void)printf("Quitted loop!%s","\r\n");
+                        (void)printf("Quitted loop!%s", "\r\n");
                     }
                     DESTROY_MODEL_INSTANCE(myTestOMeter);
                 }

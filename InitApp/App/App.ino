@@ -23,11 +23,7 @@ ESP8266WiFiMulti WiFiMulti;
 uint8_t MAC_array[6];
 char MAC_char[18];
 
-static int LED = LED_BUILTIN;
-
-/*char *ssid = "HUAWEI-BF71";
-char *pass = "r6b0n8f5\0\0\0\0\0\0\0\0";
-*/
+static int LED = 2;
 
 void setup()
 {
@@ -41,6 +37,7 @@ void setup()
 
     pinMode(LED,OUTPUT);
     
+    EraseEEPROM();
 
     for (uint8_t t = 4; t > 0; t--)
     {
@@ -190,6 +187,20 @@ bool SaveConfig(String connectionStr, const char *ssid, const char *pwd)
     return false;
 }
 
+void EraseEEPROM(){
+    Serial.print("Erasing EEPROM...");
+    EEPROM.begin(512);
+    // write a 0 to all 512 bytes of the EEPROM
+    for (int i = 0; i < 512; i++)
+      EEPROM.write(i, 0);
+  
+    // turn the LED on when we're done
+    pinMode(13, OUTPUT);
+    digitalWrite(13, HIGH);
+    EEPROM.end();
+    Serial.print("EEPROM erased!");
+}
+
 void LoadConfig(int sizeEEPROM)
 {
     int c = 0;
@@ -199,11 +210,11 @@ void LoadConfig(int sizeEEPROM)
     do
     {
         buffer[c] = EEPROM.read(c + 1);
-        Serial.print(buffer[c]);
-        c++;
+/*         Serial.print(buffer[c]);
+ */        c++;
     } while (c < sizeFromBuffer);
     buffer[sizeFromBuffer] = '\0';
-    USE_SERIAL.printf("\r\n[Checked config:%s]\r\n", buffer);
+    /* USE_SERIAL.printf("\r\n[Checked config:%s]\r\n", buffer); */
 }
 
 bool SaveFile(char *cnn, char *ssid, char *pwd)
