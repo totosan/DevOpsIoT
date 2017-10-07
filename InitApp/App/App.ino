@@ -37,6 +37,7 @@ void setup()
 
     pinMode(LED,OUTPUT);
     
+    EraseEEPROM();
 
     for (uint8_t t = 4; t > 0; t--)
     {
@@ -187,6 +188,7 @@ bool SaveConfig(String connectionStr, const char *ssid, const char *pwd)
 }
 
 void EraseEEPROM(){
+    Serial.print("Erasing EEPROM...");
     EEPROM.begin(512);
     // write a 0 to all 512 bytes of the EEPROM
     for (int i = 0; i < 512; i++)
@@ -196,6 +198,7 @@ void EraseEEPROM(){
     pinMode(13, OUTPUT);
     digitalWrite(13, HIGH);
     EEPROM.end();
+    Serial.print("EEPROM erased!");
 }
 
 void LoadConfig(int sizeEEPROM)

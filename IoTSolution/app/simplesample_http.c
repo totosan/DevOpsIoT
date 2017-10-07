@@ -146,6 +146,7 @@ void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCal
         digitalWrite(LED, HIGH);
         delay(300);
         digitalWrite(LED, LOW);
+        print("Blink");
     }
     // (void)printf("Message Id: %u Received.\r\n", messageTrackingId);
 
