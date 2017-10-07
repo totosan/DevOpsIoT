@@ -25,10 +25,6 @@ char MAC_char[18];
 
 static int LED = LED_BUILTIN;
 
-/*char *ssid = "HUAWEI-BF71";
-char *pass = "r6b0n8f5\0\0\0\0\0\0\0\0";
-*/
-
 void setup()
 {
 
@@ -188,6 +184,18 @@ bool SaveConfig(String connectionStr, const char *ssid, const char *pwd)
         return true;
     }
     return false;
+}
+
+void EraseEEPROM(){
+    EEPROM.begin(512);
+    // write a 0 to all 512 bytes of the EEPROM
+    for (int i = 0; i < 512; i++)
+      EEPROM.write(i, 0);
+  
+    // turn the LED on when we're done
+    pinMode(13, OUTPUT);
+    digitalWrite(13, HIGH);
+    EEPROM.end();
 }
 
 void LoadConfig(int sizeEEPROM)
