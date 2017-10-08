@@ -55,9 +55,9 @@ void setup()
     }
     Serial.print("MAC: ");
     Serial.println(MAC_char);
-    Serial.println(ssid);
+/*     Serial.println(ssid);
     Serial.println(pass);
-}
+ */}
 
 void loop()
 {
@@ -65,8 +65,12 @@ void loop()
     // wait for WiFi connection
     if ((WiFiMulti.run() == WL_CONNECTED))
     {
-
+        Serial.println("Connected!");
+        
         HTTPClient http;
+
+        Serial.println("5sec before starting update...!");
+        delay(5000);
 
         USE_SERIAL.print("[HTTP] begin...\n");
         // configure traged server and url
