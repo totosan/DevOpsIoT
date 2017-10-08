@@ -61,7 +61,7 @@ DECLARE_MODEL(TestOMeter,
               WITH_DATA(ascii_char_ptr_no_quotes, Commands),*/
 
               /* commands, triggered by exteranl*/
-              WITH_ACTION(TurnBuzzerO),
+              WITH_ACTION(TurnBuzzerOn),
               WITH_ACTION(TurnBuzzerOff),
               WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
               /*WITH_METHOD(UpdateFirmware_Method)*/
