@@ -28,20 +28,19 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     var connectionString = GetEnvironmentVariable("devopsIoTHubRegistryConnection").Split(':')[1].Trim();
     var firmwareUrl = GetEnvironmentVariable("firmwareUrl").Replace(": ", ";").Split(';')[1].Trim();
 
-    var message = new Message(System.Text.ASCIIEncoding.ASCII.GetBytes(@"{""Name"":""UpdateFirmware"",""Parameters"":{""url"":""http://devops005storage.blob.core.windows.net/devops-iot-firmware/app.ino.bin"",""version"":""2.10""}}"));
 
     registryManager = RegistryManager.CreateFromConnectionString(connectionString);
     client = ServiceClient.CreateFromConnectionString(connectionString);
 
-    var devices = await registryManager.GetDevicesAsync(100);
+    var devices = (await registryManager.GetDevicesAsync(100)).ToArray();
     int i=0;
-    foreach(var device in devices){
+        for(i=0;i<devices.Count();i++){
+    var message = new Message(System.Text.ASCIIEncoding.ASCII.GetBytes(@"{""Name"":""UpdateFirmware"",""Parameters"":{""url"":""http://devops005storage.blob.core.windows.net/devops-iot-firmware/app.ino.bin"",""version"":""2.10""}}"));
         if(i==number)
             break;
-        i++;
-        if(device.Status == DeviceStatus.Enabled){
-            log.Info($"Device Id: {device.Id}");
-            await client.SendAsync(device.Id,message);
+        if(devices[i].Status == DeviceStatus.Enabled){
+            log.Info($"Device Id: {devices[i].Id}");
+            await client.SendAsync(devices[i].Id,message);
         }
     }
     

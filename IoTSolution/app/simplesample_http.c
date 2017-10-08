@@ -61,7 +61,7 @@ DECLARE_MODEL(TestOMeter,
               WITH_DATA(ascii_char_ptr_no_quotes, Commands),*/
 
               /* commands, triggered by exteranl*/
-              WITH_ACTION(TurnBuzzerO),
+              WITH_ACTION(TurnBuzzerOn),
               WITH_ACTION(TurnBuzzerOff),
               WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
               /*WITH_METHOD(UpdateFirmware_Method)*/
@@ -70,23 +70,24 @@ DECLARE_MODEL(TestOMeter,
 END_NAMESPACE(TestDataNS);
 
 //******************************
-//turning Fan On
+//turning buzzer On
 //******************************
 EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device)
 {
     (void)device;
-    tone(2,1000);    
+    analogWriteFreq(1000);
+    analogWrite(2,HIGH);    
     (void)printf("Turning Buzzer on.\r\n");
     return EXECUTE_COMMAND_SUCCESS;
 }
 
 //******************************
-//turning Fan Off
+//turning buzzer Off
 //******************************
 EXECUTE_COMMAND_RESULT TurnBuzzerOff(TestOMeter *device)
 {
     (void)device;
-    noTone(2);
+    analogWrite(2,LOW);
     (void)printf("Turning Buzzer off.\r\n");
     return EXECUTE_COMMAND_SUCCESS;
 }
