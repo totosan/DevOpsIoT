@@ -349,9 +349,9 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                         {
                             if (m_counter % 10==0)
                             {
-                                digitalWrite(BUILDIN_LED,HIGH);
-                                delay(70);
                                 digitalWrite(BUILDIN_LED,LOW);
+                                delay(70);
+                                digitalWrite(BUILDIN_LED,HIGH);
                             }
 
                             if (m_counter >= 100)
