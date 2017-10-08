@@ -72,7 +72,7 @@ END_NAMESPACE(TestDataNS);
 //******************************
 //turning buzzer On
 //******************************
-EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device)
+EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device, int, ID)
 {
     (void)device;
     analogWriteFreq(1000);
@@ -84,7 +84,7 @@ EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device)
 //******************************
 //turning buzzer Off
 //******************************
-EXECUTE_COMMAND_RESULT TurnBuzzerOff(TestOMeter *device)
+EXECUTE_COMMAND_RESULT TurnBuzzerOff(TestOMeter *device, int, ID)
 {
     (void)device;
     analogWrite(2,LOW);
