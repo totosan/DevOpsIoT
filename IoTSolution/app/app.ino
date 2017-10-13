@@ -254,7 +254,7 @@ int LoadConfig(int sizeEEPROM)
         /*        Serial.printf("c:%d ",c);
         Serial.println(buffer[c-1]);*/
     } while (c <= sizeFromEEPROM && buffer[c - 1] != '\0');
-
+    buffer[sizeFromEEPROM] = '\0';
     /*Serial.printf("[EEPROM]     after reading to buffer: %s\n", buffer);
 */
     if (buffer[0] != '\0')
