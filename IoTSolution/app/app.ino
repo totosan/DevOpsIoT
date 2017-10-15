@@ -54,6 +54,8 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED_SIGNAL, OUTPUT);
     pinMode(A0, INPUT);
+    pinMode(4,OUTPUT);
+    pinMode(14,OUTPUT);
 
     initSerial();
 

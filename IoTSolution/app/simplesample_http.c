@@ -33,6 +33,7 @@ static int m_uploadInterval = 100;
 static int m_counter = 0;
 static int LED = 5;
 static int BUILDIN_LED = 2;
+static int buzzer = 14;
 
 void DebugPrint(char *msg){
 #ifdef DEBUG
@@ -83,10 +84,16 @@ END_NAMESPACE(TestDataNS);
 EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device, int ID)
 {
     (void)device;
-    analogWriteFreq(1000);
-    analogWrite(2,HIGH);    
-    (void)printf("Turning Buzzer on.\r\n");
+    digitalWrite(4,HIGH);    
     return EXECUTE_COMMAND_SUCCESS;
+}
+
+void BuzzerOn()
+{
+    analogWriteFreq(2000);
+    analogWrite(buzzer,HIGH);    
+    (void)printf("Turning Buzzer on.\r\n");
+
 }
 
 //******************************
@@ -95,9 +102,13 @@ EXECUTE_COMMAND_RESULT TurnBuzzerOn(TestOMeter *device, int ID)
 EXECUTE_COMMAND_RESULT TurnBuzzerOff(TestOMeter *device, int ID)
 {
     (void)device;
-    analogWrite(2,LOW);
-    (void)printf("Turning Buzzer off.\r\n");
+    digitalWrite(4,LOW);
     return EXECUTE_COMMAND_SUCCESS;
+}
+
+BuzzerOff(){
+    analogWrite(buzzer,LOW);
+    (void)printf("Turning Buzzer off.\r\n");
 }
 
 char *getFileNameFromPath(char *path)
@@ -361,9 +372,11 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                             DebugPrint("1");
                             if (m_counter % 10==0)
                             {
+                                BuzzerOn();
                                 digitalWrite(LED,HIGH);
                                 delay(70);
                                 digitalWrite(LED,LOW);
+                                BuzzerOff();
                             }
                             DebugPrint("2");
                             
