@@ -124,7 +124,7 @@ EXECUTE_COMMAND_RESULT UpdateFirmware(TestOMeter *device, char *url, char *versi
 
     int compareResult = strcmp(version, device->Version);
     printf("compare restult between device->Version (%s) and version from command (%s) is %d \r\n", device->Version, version, compareResult);
-    if (true && compareResult > 0)
+    if (true || compareResult > 0)
     {
         /* Updater *updater_instance = Updater_create();
         Updater_do(&updater_instance, url);*/
@@ -361,9 +361,9 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                             DebugPrint("1");
                             if (m_counter % 10==0)
                             {
-                                digitalWrite(LED,LOW);
-                                delay(70);
                                 digitalWrite(LED,HIGH);
+                                delay(70);
+                                digitalWrite(LED,LOW);
                             }
                             DebugPrint("2");
                             
