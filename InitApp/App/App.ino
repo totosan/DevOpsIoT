@@ -218,7 +218,7 @@ void LoadConfig(int sizeEEPROM)
  */        c++;
     } while (c < sizeFromBuffer);
     buffer[sizeFromBuffer] = '\0';
-    /* USE_SERIAL.printf("\r\n[Checked config:%s]\r\n", buffer); */
+    USE_SERIAL.printf("\r\n[Checked config:%s]\r\n", buffer); 
 }
 
 bool SaveFile(char *cnn, char *ssid, char *pwd)

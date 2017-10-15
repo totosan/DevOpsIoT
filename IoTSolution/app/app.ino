@@ -141,7 +141,7 @@ bool LoadUpdateFlag()
     bool bUpdate = (bool)EEPROM.read(250);
     EEPROM.end();
     if (bUpdate)
-        Serial.print("Has update pending");
+        Serial.print("Has update pending\r\n");
     return bUpdate;
 }
 
@@ -254,19 +254,29 @@ int LoadConfig(int sizeEEPROM)
         /*        Serial.printf("c:%d ",c);
         Serial.println(buffer[c-1]);*/
     } while (c <= sizeFromEEPROM && buffer[c - 1] != '\0');
-    buffer[sizeFromEEPROM] = '\0';
-    /*Serial.printf("[EEPROM]     after reading to buffer: %s\n", buffer);
-*/
+    buffer[sizeFromEEPROM+1] = '\0';
+    Serial.printf("[EEPROM]     after reading to buffer: %s\n", buffer);
+
     if (buffer[0] != '\0')
     {
         char *buffer2 = strdup(buffer);
-        connectionString = strdup(getValue(buffer2, '|', 0));
-        ssid = strdup(getValue(buffer2, '|', 1));
-        pass = strdup(getValue(buffer2, '|', 2));
-        /* Serial.printf("[EEPROM]     new connectionStr:[%s]\n", connectionString);
-        Serial.printf("[EEPROM]     new SSID:[%s]\n", ssid);
+
+        char *ch[3];
+        int i=0;
+        ch[i] = strtok(buffer,"|");
+        while(ch[i]!=NULL){
+            printf("token: %s\r\n",ch[i]);
+            ch[++i] = strtok(NULL,"|");
+        }
+
+        connectionString = strdup(ch[0]);
+        ssid = strdup(ch[1]);
+        pass = strdup(ch[2]);
+
+        Serial.printf("[EEPROM]     new connectionStr:[%s]\n", connectionString);
+        /*Serial.printf("[EEPROM]     new SSID:[%s]\n", ssid);
         Serial.printf("[EEPROM]     new pass:[%s]\n", pass); */
-        splitString(buffer);
+        /*splitString(buffer);*/
     }
     else
     {
@@ -306,7 +316,7 @@ char *getValue(char *data, char separator, int index)
 {
     int found = 0;
     int strIndex[] = {0, -1};
-    int maxIndex = strlen(data) - 1;
+    int maxIndex = strlen(data) - 1;   
 
     for (int i = 0; i <= maxIndex && found <= index; i++)
     {

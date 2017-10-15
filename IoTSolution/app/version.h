@@ -1,1 +1,1 @@
-static const char *version = "2.10";
+static const char *version = "2.11";

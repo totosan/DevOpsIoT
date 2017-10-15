@@ -1,3 +1,5 @@
+#define noDEBUG
+
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #include <Arduino.h>
@@ -31,6 +33,12 @@ static int m_uploadInterval = 100;
 static int m_counter = 0;
 static int LED = 5;
 static int BUILDIN_LED = 2;
+
+void DebugPrint(char *msg){
+#ifdef DEBUG
+    printf("[DebugLine] %s\r\n",msg);    
+#endif
+}
 
 typedef struct EVENT_INSTANCE_TAG
 {
@@ -145,6 +153,8 @@ METHODRETURN_HANDLE UpdateFirmware_Method(TestOMeter *device)
 //******************************
 void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
+    DebugPrint("5");
+    
     unsigned int messageTrackingId = (unsigned int)(uintptr_t)userContextCallback;
     for (int i = 0; i < 3; i++)
     {
@@ -348,19 +358,22 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
 
                         do
                         {
+                            DebugPrint("1");
                             if (m_counter % 10==0)
                             {
                                 digitalWrite(LED,LOW);
                                 delay(70);
                                 digitalWrite(LED,HIGH);
                             }
-
+                            DebugPrint("2");
+                            
                             if (m_counter >= 100)
                             {
                                 myTestOMeter->BatteryLevel = avgBatteryLevel; /* + (rand() % 4 + 2);*/
                                 myTestOMeter->Temperature = analogRead(pin);
                                 myTestOMeter->dtime = "";
-
+                                DebugPrint("3");
+                                
                                 {
                                     unsigned char *destination;
                                     size_t destinationSize;
@@ -374,7 +387,8 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                                     }
                                     else
                                     {
-
+                                        DebugPrint("4");
+                                        
                                         /* char *temp = malloc(destinationSize + 1);
                                     memcpy(temp, destination, destinationSize);
                                     temp[destinationSize] = "\0";*/
