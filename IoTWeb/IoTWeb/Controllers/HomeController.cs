@@ -5,21 +5,37 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using IoTWeb.Models;
+using Microsoft.Azure.Devices;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Microsoft.Extensions.Options;
 
 namespace IoTWeb.Controllers
 {
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
+	public class HomeController : Controller
+	{
+		private readonly AppSettings _appsettings;
+
+		public HomeController(IOptions<AppSettings> appsettings)
+		{
+			_appsettings = appsettings.Value;
+		}
+
+		RegistryManager regMan;
+		public IActionResult Index()
+		{
 			SetDeviceList();
 
-            return View();
-        }
+			return View();
+		}
 
-		private void SetDeviceList()
+
+		private async Task SetDeviceList()
 		{
-			ViewBag.Devices = new List<string> { "Device1", "Device2" };
+			regMan = RegistryManager.CreateFromConnectionString($"{_appsettings.IoTHubConnectionString}");
+			var devices = await regMan.GetDevicesAsync(10);
+
+			ViewBag.Devices = devices.Select(x => new { Name = x.Id, Status = x.Status }).ToList();
 		}
 
 		public IActionResult Overview()
@@ -30,22 +46,22 @@ namespace IoTWeb.Controllers
 		}
 
 		public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+		{
+			ViewData["Message"] = "Your application description page.";
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+		public IActionResult Contact()
+		{
+			ViewData["Message"] = "Your contact page.";
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
 }

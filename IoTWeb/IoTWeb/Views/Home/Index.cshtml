@@ -1,12 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 <h2>Home</h2>
 
 <ul>
-	@{ foreach (var device in ViewBag.Devices)
+	@{ if (ViewBag.Devices != null)
 		{
+			foreach (var device in ViewBag.Devices)
+			{
 			<li><a href="/overview/welcome?name=Adalbert&times=@ViewBag.Devices.Count">@device</a></li>
-		} }
+				}
+			}
+		}
 </ul>
