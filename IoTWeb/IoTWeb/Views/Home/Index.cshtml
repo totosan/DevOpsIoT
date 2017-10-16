@@ -9,7 +9,7 @@
 		{
 			foreach (var device in ViewBag.Devices)
 			{
-			<li><a href="/overview/welcome?name=Adalbert&times=@ViewBag.Devices.Count">@device</a></li>
+			<li><a href="/overview/welcome?name=Adalbert&times=@ViewBag.Devices.Count">@device.Id</a> - @device.Status</li>
 				}
 			}
 		}

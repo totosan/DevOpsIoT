@@ -35,7 +35,7 @@ namespace IoTWeb.Controllers
 			regMan = RegistryManager.CreateFromConnectionString($"{_appsettings.IoTHubConnectionString}");
 			var devices = await regMan.GetDevicesAsync(10);
 
-			ViewBag.Devices = devices.Select(x => new { Name = x.Id, Status = x.Status }).ToList();
+			ViewBag.Devices = devices.ToList();
 		}
 
 		public IActionResult Overview()
