@@ -64,6 +64,7 @@ Write-Host 'appsettings config...'
 $AzureWebJobsStorage = "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=${storage_account_name};AccountKey=${storage_key}"
 $functionApp = Get-AzureRmWebAppSlot -ResourceGroupName $rg_name -Name $function_name -Slot production -ErrorAction Stop
 $blob_uri = $blob_uri -replace "https", "http"
+$iothub_cnnStr_fixed = ($iothub_connectionstring.PrimaryConnectionString -replace "ShareAccessKeyName","SharedAccessKeyName" )
 $settings = @{
     FUNCTIONS_EXTENSION_VERSION="~1";
     WEBSITE_NODE_DEFAULT_VERSION="6.5.0";
@@ -72,7 +73,7 @@ $settings = @{
     devopstesthub="";
     devopstesthubRead="";
     devopsiot_internal="";
-    devopsIoTHubRegistryConnection=($iothub_connectionstring.PrimaryConnectionString -replace "ShareAccessKeyName","SharedAccessKeyName" ) ;
+    devopsIoTHubRegistryConnection=$iothub_cnnStr_fixed ;
     firmwareUrl="${blob_uri}devops-iot-firmware/app.ino.bin"
 }
 Set-AzureRmWebAppSlot -ResourceGroupName $rg_name -Name $function_name -Slot production -AppSettings $settings  -ErrorAction Stop
@@ -83,3 +84,4 @@ $firmware_path = Join-Path $firmware_path $firmware_name
 Set-AzureStorageBlobContent -File $firmware_path -Blob $firmware_name -Container $container_name -Context $stoCtx -Force -ErrorAction Stop
 
 Write-Host "##vso[task.setvariable variable=functionName]$function_name"
+Write-Host "##vso[task.setvariable variable=iothubcnnstr]$iothub_cnnStr_fixed"
