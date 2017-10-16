@@ -30,12 +30,12 @@ namespace IoTWeb.Controllers
 		}
 
 
-		private async Task SetDeviceList()
+		private void SetDeviceList()
 		{
 			try
 			{
 				regMan = RegistryManager.CreateFromConnectionString($"{_appsettings.IoTHubConnectionString}");
-				var devices = await regMan.GetDevicesAsync(10);
+				var devices = regMan.GetDevicesAsync(10).GetAwaiter().GetResult();
 
 				ViewBag.Devices = devices.ToList();
 			}
