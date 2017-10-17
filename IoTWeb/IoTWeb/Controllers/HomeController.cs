@@ -9,6 +9,8 @@ using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace IoTWeb.Controllers
 {
@@ -44,6 +46,17 @@ namespace IoTWeb.Controllers
 
 				throw;
 			}
+		}
+
+		public async Task<IActionResult> UpdateAll()
+		{
+			var url = "https://devops005function.azurewebsites.net/api/Commanding";
+			var client = new HttpClient();
+			
+			var response = await client.GetAsync(url);
+			var content = await response.Content.ReadAsStringAsync();
+
+			return View("Index");
 		}
 
 		public IActionResult Overview()

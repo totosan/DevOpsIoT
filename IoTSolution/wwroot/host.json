@@ -1,4 +1,4 @@
 {
-"functions":["BootStrapDevice","Commanding","EventHubTriggerCSharp1"],
+"functions":["BootStrapDevice","Commanding","EventHubTriggerCSharp1","TurnFan"],
 "id":"51cbb4b7da8c42d0900b42d1ffc26021"
 }
