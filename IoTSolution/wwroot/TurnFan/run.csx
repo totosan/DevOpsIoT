@@ -21,7 +21,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
         .FirstOrDefault(q => string.Compare(q.Key, "DeviceId", true) == 0)
         .Value;
 
-    log.Info($"parameter was {number} for device {deviceId}");
+    log.Info($"parameter was {Action} for device {deviceId}");
 
     var connectionString = GetEnvironmentVariable("devopsIoTHubRegistryConnection").Split(':')[1].Trim();
     
