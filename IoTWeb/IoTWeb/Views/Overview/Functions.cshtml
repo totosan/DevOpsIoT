@@ -1,0 +1,11 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	ViewData["Title"] = "ESP Overview";
+}
+
+<h2>ESP Overview</h2>
+<ul>
+		<li>@ViewData["deviceId"]&nbsp; <img src="~/images/fan.png" style="width:20px" />&nbsp;@Html.ActionLink("Turn Fan On", "TurnOn")</li>
+</ul>

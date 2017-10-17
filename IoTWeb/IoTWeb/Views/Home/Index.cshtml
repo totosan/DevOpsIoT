@@ -9,9 +9,12 @@
 		{
 			foreach (var device in ViewBag.Devices)
 			{
-			<li><a href="/overview/welcome?name=Adalbert&times=@ViewBag.Devices.Count">@device.Id</a> - @device.Status</li>
+				<li><a href="/overview/functions?deviceId=@device.Id">@device.Id</a> - @device.Status</li>
 				}
 			}
-		}
+	}
 </ul>
-@Html.ActionLink("Update all", "UpdateAll");
+
+<div class="btn">
+	@Html.ActionLink("Update all", "UpdateAll")
+</div>

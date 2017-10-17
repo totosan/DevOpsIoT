@@ -56,6 +56,8 @@ namespace IoTWeb.Controllers
 			var response = await client.GetAsync(url);
 			var content = await response.Content.ReadAsStringAsync();
 
+			SetDeviceList();
+
 			return View("Index");
 		}
 
@@ -75,7 +77,7 @@ namespace IoTWeb.Controllers
 
 		public IActionResult Contact()
 		{
-			ViewData["Message"] = "Your contact page.";
+			ViewData["Message"] = "Thomas Tomow - Alegri";
 
 			return View();
 		}

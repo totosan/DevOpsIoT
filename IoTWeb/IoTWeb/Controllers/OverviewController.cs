@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,22 @@ namespace IoTWeb.Controllers
 			return View();
         }
 
-		public IActionResult Welcome(string name, int times = 1)
+		public IActionResult Functions(string deviceId)
 		{
-			ViewData["Message"] = "Hello " + name;
-			ViewData["NumTimes"] = times;
+			ViewData["deviceId"] = deviceId;
 
 			return View();
+		}
+
+		public async Task<IActionResult> TurnOn(string deviceId)
+		{
+			var url = "https://devops005function.azurewebsites.net/api/TurnFan?action=On&deviceId="+deviceId;
+			var client = new HttpClient();
+
+			var response = await client.GetAsync(url);
+			var content = await response.Content.ReadAsStringAsync();
+
+			return View("Functions");
 		}
     }
 }
