@@ -35,5 +35,16 @@ namespace IoTWeb.Controllers
 
 			return View("Functions");
 		}
-    }
+
+		public async Task<IActionResult> TurnOff(string deviceId)
+		{
+			var url = "https://devops005function.azurewebsites.net/api/TurnFan?action=Off&deviceId=" + deviceId;
+			var client = new HttpClient();
+
+			var response = await client.GetAsync(url);
+			var content = await response.Content.ReadAsStringAsync();
+
+			return View("Functions");
+		}
+	}
 }

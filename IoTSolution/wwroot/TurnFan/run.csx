@@ -28,8 +28,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     registryManager = RegistryManager.CreateFromConnectionString(connectionString);
     client = ServiceClient.CreateFromConnectionString(connectionString);
     var method = action == "On" ? 
-    @"{""Name"":""TurnFanOn"",""Parameters"":{""ID"":""0""}}":
-    @"{""Name"":""TurnFanOff"",""Parameters"":{""ID"":""0""}}";
+    @"{""Name"":""TurnFanOn"",""Parameters"":{""ID"":0}}":
+    @"{""Name"":""TurnFanOff"",""Parameters"":{""ID"":0}}";
         var message = new Message(System.Text.ASCIIEncoding.ASCII.GetBytes(method));
         await client.SendAsync(deviceId,message);
     
