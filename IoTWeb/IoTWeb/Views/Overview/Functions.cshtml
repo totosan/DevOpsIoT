@@ -7,5 +7,5 @@
 
 <h2>ESP Overview</h2>
 <ul>
-		<li>@ViewData["deviceId"]&nbsp; <img src="~/images/fan.png" style="width:20px" />&nbsp;@Html.ActionLink("Turn Fan On", "TurnOn")</li>
+		<li>@ViewData["deviceId"]&nbsp; <img src="~/images/fan.png" style="width:20px" />&nbsp;@Html.ActionLink("Turn Fan On", "TurnOn", new { deviceId = (string)ViewData["deviceId"] })</li>
 </ul>
