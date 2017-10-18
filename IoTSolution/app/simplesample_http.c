@@ -70,8 +70,8 @@ DECLARE_MODEL(TestOMeter,
               WITH_DATA(ascii_char_ptr_no_quotes, Commands),*/
 
               /* commands, triggered by exteranl*/
-              WITH_ACTION(TurnBuzzerOn, int, ID),
-              WITH_ACTION(TurnBuzzerOff, int, ID),
+              WITH_ACTION(TurnFanOn, int, ID),
+              WITH_ACTION(TurnFanOff, int, ID),
               WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
               /*WITH_METHOD(UpdateFirmware_Method)*/
               );
@@ -80,7 +80,7 @@ END_NAMESPACE(TestDataNS);
 
 
 //******************************
-//turning buzzer On
+//turning Fan On
 //******************************
 EXECUTE_COMMAND_RESULT TurnFanOn(TestOMeter *device, int ID)
 {
@@ -90,7 +90,7 @@ EXECUTE_COMMAND_RESULT TurnFanOn(TestOMeter *device, int ID)
 }
 
 //******************************
-//turning buzzer Off
+//turning Fan Off
 //******************************
 EXECUTE_COMMAND_RESULT TurnFanOff(TestOMeter *device, int ID)
 {
