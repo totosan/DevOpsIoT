@@ -50,7 +50,7 @@ namespace IoTWeb.Controllers
 
 		public async Task<IActionResult> UpdateAll()
 		{
-			var url = "https://devops005function.azurewebsites.net/api/Commanding";
+			var url = "https://devops005function.azurewebsites.net/api/Commanding?number=10";
 			var client = new HttpClient();
 			
 			var response = await client.GetAsync(url);
