@@ -70,8 +70,8 @@ DECLARE_MODEL(TestOMeter,
               WITH_DATA(ascii_char_ptr_no_quotes, Commands),*/
 
               /* commands, triggered by exteranl*/
-              WITH_ACTION(TurnFanOn, int, ID),
-              WITH_ACTION(TurnFanOff, int, ID),
+             /* WITH_ACTION(TurnFanOn, int, ID),
+              WITH_ACTION(TurnFanOff, int, ID),*/
               WITH_ACTION(UpdateFirmware, ascii_char_ptr, url, ascii_char_ptr, version)
               /*WITH_METHOD(UpdateFirmware_Method)*/
               );
@@ -373,11 +373,11 @@ void simplesample_http_run(int pin, const char *cnnStr, const char *deviceId)
                             DebugPrint("1");
                             if (m_counter % 10==0)
                             {
-                                BuzzerOn();
+                               // BuzzerOn();
                                 digitalWrite(LED,HIGH);
                                 delay(70);
                                 digitalWrite(LED,LOW);
-                                BuzzerOff();
+                               // BuzzerOff();
                             }
                             DebugPrint("2");
                             
